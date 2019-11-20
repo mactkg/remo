@@ -27,7 +27,7 @@ jobs:
     - name: Build
       run: make
   test:
-    name: test
+    name: Test
     runs-on: [ubuntu-latest]
     steps:
 
@@ -48,5 +48,5 @@ jobs:
             dep ensure
         fi
 
-    - name: Build
+    - name: Test
       run: make test
