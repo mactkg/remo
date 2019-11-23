@@ -30,10 +30,10 @@ type Status struct {
 
 // Message is representation of message on Slack
 type Message struct {
-	Channel string
-	Text    string
-	AsUser  bool
-	Parse   string
+	Channel string `json:"channel"`
+	Text    string `json:"text"`
+	AsUser  bool   `json:"as_user"`
+	Parse   string `json:"parse"`
 }
 
 var baseURL = "https://slack.com/api"
