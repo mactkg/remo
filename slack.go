@@ -13,10 +13,18 @@ type Slack struct {
 	client  http.Client
 }
 
-type ProfileRequest struct {
+// Request struct for users.profile
+type profileRequest struct {
 	Profile Profile `json:"profile"`
 }
 
+// Request struct for chat.postMessage
+type messageRequest struct {
+	*Message
+}
+
+// Profile is representation of profile.
+// It have only a embedded struct for now, but it could have some fields such as user's name or so.
 type Profile struct {
 	*Status
 }
@@ -68,7 +76,7 @@ func (s Slack) createRequest(method string, action string, data interface{}) (*h
 // required scope: users.profile:write
 func (s Slack) SetStatus(status Status) error {
 	profile := Profile{&status}
-	data := ProfileRequest{
+	data := profileRequest{
 		Profile: profile,
 	}
 	req, err := s.createRequest("POST", "users.profile.set", data)
@@ -94,7 +102,8 @@ func (s Slack) PostMessage(to string, message string) error {
 		AsUser:  true,
 		Parse:   "full",
 	}
-	req, err := s.createRequest("POST", "chat.postMessage", msg)
+	data := messageRequest{&msg}
+	req, err := s.createRequest("POST", "chat.postMessage", data)
 	if err != nil {
 		return err
 	}

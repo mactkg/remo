@@ -12,7 +12,7 @@ func TestSetStatus(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			decoder := json.NewDecoder(r.Body)
-			reqProfile := ProfileRequest{}
+			reqProfile := profileRequest{}
 			err := decoder.Decode(&reqProfile)
 			if err != nil {
 				t.Fatalf("Decode request body error: %v", err)
@@ -56,8 +56,8 @@ func TestPostMessage(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			decoder := json.NewDecoder(r.Body)
-			message := Message{}
-			err := decoder.Decode(&message)
+			reqMessage := messageRequest{}
+			err := decoder.Decode(&reqMessage)
 			if err != nil {
 				t.Fatalf("Decode request body error: %v", err)
 			}
@@ -66,15 +66,15 @@ func TestPostMessage(t *testing.T) {
 				t.Errorf("Wrong pass: %v", r.URL.Path)
 			}
 
-			if message.Text != "Hello!" {
-				t.Errorf("Wrong text: %v", message.Text)
+			if reqMessage.Text != "Hello!" {
+				t.Errorf("Wrong text: %v", reqMessage.Text)
 			}
 
-			if message.Channel != "#random" {
-				t.Errorf("Wrong post channel: %v", message.Channel)
+			if reqMessage.Channel != "#random" {
+				t.Errorf("Wrong post channel: %v", reqMessage.Channel)
 			}
 
-			if message.AsUser != true {
+			if reqMessage.AsUser != true {
 				t.Errorf("as_user must be true")
 			}
 
