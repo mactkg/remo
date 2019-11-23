@@ -12,22 +12,28 @@ func TestSetStatus(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			decoder := json.NewDecoder(r.Body)
-			status := Status{}
-			err := decoder.Decode(&status)
+			reqProfile := ProfileRequest{}
+			err := decoder.Decode(&reqProfile)
 			if err != nil {
 				t.Fatalf("Decode request body error: %v", err)
+			}
+
+			profile := reqProfile.Profile
+			ok := true
+			if !ok {
+				t.Fatalf("Type assertion error: %v", reqProfile)
 			}
 
 			if r.URL.Path != "/users.profile.set" {
 				t.Errorf("Wrong pass: %v", r.URL.Path)
 			}
 
-			if status.Text != "Working" {
-				t.Errorf("Wrong status text: %v", status.Text)
+			if profile.Text != "Working" {
+				t.Errorf("Wrong status text: %v", profile.Text)
 			}
 
-			if status.Emoji != ":computer:" {
-				t.Errorf("Wrong status text: %v", status.Emoji)
+			if profile.Emoji != ":computer:" {
+				t.Errorf("Wrong status text: %v", profile.Emoji)
 			}
 
 			w.Header().Set("content-Type", "text")

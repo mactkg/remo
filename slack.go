@@ -13,6 +13,14 @@ type Slack struct {
 	client  http.Client
 }
 
+type ProfileRequest struct {
+	Profile Profile `json:"profile"`
+}
+
+type Profile struct {
+	*Status
+}
+
 // Status is representation of user's status
 type Status struct {
 	Text       string `json:"status_text"`
@@ -59,7 +67,11 @@ func (s Slack) createRequest(method string, action string, data interface{}) (*h
 // SetStatus change status on Slack
 // required scope: users.profile:write
 func (s Slack) SetStatus(status Status) error {
-	req, err := s.createRequest("POST", "users.profile.set", status)
+	profile := Profile{&status}
+	data := ProfileRequest{
+		Profile: profile,
+	}
+	req, err := s.createRequest("POST", "users.profile.set", data)
 	if err != nil {
 		return err
 	}
