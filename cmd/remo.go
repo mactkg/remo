@@ -13,15 +13,15 @@ var mainPostChannel string
 func myUsage() {
 	// TODO: refactor to struct `Action`
 	fmt.Printf("Usage: %s [OPTIONS] argument ...\n", os.Args[0])
+	fmt.Printf("\nOptions:\n")
+	flag.PrintDefaults()
+
 	fmt.Printf("Actions:\n")
 	fmt.Printf("  start,ohayo:\n\tStart remote working\n")
 	fmt.Printf("  pause:\n\tPause working\n")
 	fmt.Printf("  resume,unpause:\n\tResume working\n")
 	fmt.Printf("  move-office:\n\tStop remote work and move to office\n")
 	fmt.Printf("  finish,done,otsu:\n\tFinish working\n")
-
-	fmt.Printf("\nOptions:\n")
-	flag.PrintDefaults()
 }
 
 func main() {
