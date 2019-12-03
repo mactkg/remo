@@ -3,7 +3,6 @@ package remo
 import (
 	"bytes"
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -90,7 +89,6 @@ func (s Slack) SetStatus(status Status) error {
 		return err
 	}
 
-	log.Printf("Success setting status to %v", status)
 	return nil
 }
 
@@ -115,6 +113,5 @@ func (s Slack) PostMessage(to string, message string) error {
 		return err
 	}
 
-	log.Printf("Success posting message '%s' to %s\n", message, to)
 	return nil
 }
