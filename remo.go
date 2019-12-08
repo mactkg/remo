@@ -1,33 +1,25 @@
 package remo
 
 import (
-	"io"
 	"log"
 	"os"
 )
 
 type Remo struct {
 	slack  Slack
-	Config Config
+	config Config
 }
 
-type Config struct {
-	SlackToken      string
-	MainPostChannel string
-	Out             io.Writer
-}
+var out = os.Stdout
 
-func New(config Config) *Remo {
-	slack := NewSlack(config.SlackToken)
+func New(config *Config) *Remo {
+	slack := NewSlack(config.Slack.Token)
 
-	if config.Out == nil {
-		config.Out = os.Stdout
-	}
-	log.SetOutput(config.Out)
+	log.SetOutput(out)
 
 	return &Remo{
 		slack:  slack,
-		Config: config,
+		config: *config,
 	}
 }
 
@@ -41,11 +33,12 @@ func (r *Remo) notice(postText, statusText, statusEmoji string) (err error) {
 	}
 	log.Printf("Success changing status to %s(%s)", statusText, statusEmoji)
 
-	err = r.slack.PostMessage(r.Config.MainPostChannel, postText)
+	mainCh := r.config.Slack.MainPostChannel
+	err = r.slack.PostMessage(mainCh, postText)
 	if err != nil {
 		return
 	}
-	log.Printf(`Success post "%s" to %s`, postText, r.Config.MainPostChannel)
+	log.Printf(`Success post "%s" to %s`, postText, mainCh)
 
 	return
 }
