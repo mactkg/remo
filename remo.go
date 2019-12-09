@@ -66,3 +66,4 @@ func (r *Remo) ArriveAtOffice() error {
 func (r *Remo) FinishRemoteWork() error {
 	return r.notice("リモートワーク終了します", "閉店", ":crescent_moon:")
 }
+
