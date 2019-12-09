@@ -66,6 +66,7 @@ func main() {
 	config, err := loadConfig()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "can't load config:\n%v\n", err)
+		fmt.Fprintf(os.Stderr, "hint: you can create config run with 'remo init'\n")
 		os.Exit(1)
 	}
 
