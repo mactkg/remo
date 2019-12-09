@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="142984da-a9cc-4cbf-bb6d-5ef127f23aa6" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/remo.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/remo.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/remo.go" beforeDir="false" afterPath="$PROJECT_DIR$/remo.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/remo_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/remo_test.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +55,18 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go Test.go test github.com/mactkg/remo">
+    <configuration name="ExampleGetDefaultConfigPath in github.com/mactkg/remo" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="remo" />
+      <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/mactkg/remo" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^ExampleGetDefaultConfigPath$" />
+      <method v="2" />
+    </configuration>
     <configuration name="TestDecoder in github.com/mactkg/remo" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="remo" />
       <working_directory value="$PROJECT_DIR$" />
@@ -69,8 +78,32 @@
       <pattern value="^TestDecoder$" />
       <method v="2" />
     </configuration>
+    <configuration name="TestNew in github.com/mactkg/remo" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="remo" />
+      <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/mactkg/remo" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestNew$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go test github.com/mactkg/remo" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="remo" />
+      <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/mactkg/remo" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.go test github.com/mactkg/remo" />
+        <item itemvalue="Go Test.ExampleGetDefaultConfigPath in github.com/mactkg/remo" />
+        <item itemvalue="Go Test.TestNew in github.com/mactkg/remo" />
         <item itemvalue="Go Test.TestDecoder in github.com/mactkg/remo" />
       </list>
     </recent_temporary>
