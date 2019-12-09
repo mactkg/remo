@@ -8,8 +8,6 @@ import (
 	"github.com/mactkg/remo"
 )
 
-var mainPostChannel string
-
 func myUsage() {
 	// TODO: refactor to struct `Action`
 	fmt.Printf("Usage: %s [OPTIONS] argument ...\n", os.Args[0])
@@ -17,6 +15,7 @@ func myUsage() {
 	flag.PrintDefaults()
 
 	fmt.Printf("Actions:\n")
+	fmt.Printf("  init:\n\tCreate config file\n")
 	fmt.Printf("  start,ohayo:\n\tStart remote working\n")
 	fmt.Printf("  pause:\n\tPause working\n")
 	fmt.Printf("  resume,unpause:\n\tResume working\n")
@@ -25,9 +24,26 @@ func myUsage() {
 	fmt.Printf("  finish,done,otsu:\n\tFinish working\n")
 }
 
+func loadConfig() (*remo.Config, error) {
+	config := &remo.Config{}
+
+	configPath, err := remo.GetDefaultConfigPath()
+	if err != nil {
+		return nil, err
+	}
+	configFile, err := os.Open(configPath)
+	if err != nil {
+		return nil, err
+	}
+
+	decoder := remo.NewDecoder(configFile)
+	decoder.Decode(config)
+
+	return config, nil
+}
+
 func main() {
 	flag.Usage = myUsage
-	flag.StringVar(&mainPostChannel, "mainPostCh", "", "where to post")
 	flag.Parse()
 
 	cmd := flag.Arg(0)
@@ -37,10 +53,21 @@ func main() {
 		return
 	}
 
-	token := os.Getenv("REMO_SLACK_TOKEN")
-	config := remo.Config{
-		SlackToken:      token,
-		MainPostChannel: mainPostChannel,
+	if cmd == "init" {
+		f, err := remo.CreateConfigFile()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("created new config file to %v", f.Name())
+		os.Exit(0)
+	}
+
+	config, err := loadConfig()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "can't load config:\n%v\n", err)
+		fmt.Fprintf(os.Stderr, "hint: you can create config run with 'remo init'\n")
+		os.Exit(1)
 	}
 
 	cli := remo.New(config)
@@ -61,5 +88,9 @@ func main() {
 	case "done":
 	case "otsu":
 		cli.FinishRemoteWork()
+	case "init":
+		remo.CreateConfigFile()
+	default:
+		flag.Usage()
 	}
 }
