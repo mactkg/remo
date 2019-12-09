@@ -8,3 +8,9 @@ test:
 
 clean:
 	-rm -rf bin/*
+
+install:
+	cp bin/remo /usr/local/bin/
+
+install-home-local: build
+	cp bin/remo ${HOME}/local/bin

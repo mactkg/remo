@@ -42,15 +42,21 @@ func loadConfig() (*remo.Config, error) {
 	return config, nil
 }
 
+var help, version bool
+
 func main() {
 	flag.Usage = myUsage
+	flag.BoolVar(&help, "help", false, "show help")
+	flag.BoolVar(&version, "version", false, "show version")
 	flag.Parse()
 
 	cmd := flag.Arg(0)
-	help := flag.Lookup("h")
-	if help != nil || cmd == "" {
+	if version {
+		fmt.Printf("remo version %s\n", remo.GetCurrentVersion())
+		os.Exit(0)
+	} else if help || cmd == "" {
 		flag.Usage()
-		return
+		os.Exit(0)
 	}
 
 	if cmd == "init" {
