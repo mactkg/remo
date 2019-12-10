@@ -79,20 +79,17 @@ func main() {
 	cli := remo.New(config)
 
 	switch cmd {
-	case "start":
-	case "ohayo":
+	case "start", "ohayo":
 		cli.StartRemoteWork()
 	case "pause":
 		cli.PauseRemoteWork()
-	case "resume":
-	case "unpause":
+	case "resume", "unpause":
 		cli.ResumeRemoteWork()
 	case "move-office":
 		cli.MoveToOffice()
 	case "arrive-office":
 		cli.ArriveAtOffice()
-	case "done":
-	case "otsu":
+	case "done", "otsu":
 		cli.FinishRemoteWork()
 	case "init":
 		remo.CreateConfigFile()
