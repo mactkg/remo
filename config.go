@@ -12,9 +12,15 @@ var defaultConfig = `
 [slack]
 # token = "xoxp-xxx"
 # mainPostChannel = '#report'
-# subPostChannel [
+# subPostChannel = [
 #	"#my_personal_channel"
-#]
+# ]
+
+# [[message]]
+# event = "start" # start, pause, resume, moveToOffice, ArriveAtOffice, finish
+# message = "リモートワーク開始します"
+# statusMessage = "リモート中"
+# statusIcon = "リモートワーク開始します"
 `
 
 type Config struct {
@@ -25,6 +31,13 @@ type SlackConfig struct {
 	Token           string
 	MainPostChannel string
 	SubPostChannel  []string
+}
+
+type MessageConfig struct {
+	event string
+	message string
+	statusMessage string
+	statusIcon string
 }
 
 type Decoder struct {

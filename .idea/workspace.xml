@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="142984da-a9cc-4cbf-bb6d-5ef127f23aa6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/state.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/remo.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/remo.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/config.go" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,6 +13,11 @@
   </component>
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Unnamed">
+      <favorite_root url="file://$USER_HOME$/.config/remo/config.toml" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+    </favorites_list>
   </component>
   <component name="GOROOT" path="/usr/local/Cellar/go/1.13/libexec" />
   <component name="Git.Settings">
@@ -22,6 +27,12 @@
     <option name="indexEntireGoPath" value="false" />
   </component>
   <component name="ProjectId" id="1UhnUEuTs2JrjB6n6vrbiepreSs" />
+  <component name="ProjectViewState">
+    <option name="abbreviatePackageNames" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="configurable.Global.GOPATH.is.expanded" value="true" />
@@ -43,19 +54,7 @@
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="terminal" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="Go Test.go test github.com/mactkg/remo">
+  <component name="RunManager">
     <configuration name="ExampleGetDefaultConfigPath in github.com/mactkg/remo" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="remo" />
       <working_directory value="$PROJECT_DIR$" />
@@ -99,14 +98,18 @@
       <filePath value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
       <list>
-        <item itemvalue="Go Test.go test github.com/mactkg/remo" />
-        <item itemvalue="Go Test.ExampleGetDefaultConfigPath in github.com/mactkg/remo" />
-        <item itemvalue="Go Test.TestNew in github.com/mactkg/remo" />
-        <item itemvalue="Go Test.TestDecoder in github.com/mactkg/remo" />
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
       </list>
-    </recent_temporary>
+    </option>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -116,7 +119,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
