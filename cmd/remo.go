@@ -80,20 +80,24 @@ func main() {
 
 	switch cmd {
 	case "start", "ohayo":
-		cli.StartRemoteWork()
+		err = cli.StartRemoteWork()
 	case "pause":
-		cli.PauseRemoteWork()
+		err = cli.PauseRemoteWork()
 	case "resume", "unpause":
-		cli.ResumeRemoteWork()
+		err = cli.ResumeRemoteWork()
 	case "move-office":
-		cli.MoveToOffice()
+		err = cli.MoveToOffice()
 	case "arrive-office":
-		cli.ArriveAtOffice()
+		err = cli.ArriveAtOffice()
 	case "done", "otsu":
-		cli.FinishRemoteWork()
+		err = cli.FinishRemoteWork()
 	case "init":
-		remo.CreateConfigFile()
+		_, err = remo.CreateConfigFile()
 	default:
 		flag.Usage()
+	}
+
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
 	}
 }
