@@ -34,12 +34,24 @@ func (r *Remo) notice(postText, statusText, statusEmoji string) (err error) {
 	log.Printf("Success changing status to %s(%s)", statusText, statusEmoji)
 
 	mainCh := r.config.Slack.MainPostChannel
-	err = r.slack.PostMessage(mainCh, postText)
+	messageResponse, err := r.slack.PostMessage(mainCh, postText)
 	if err != nil {
 		return
 	}
-	log.Printf(`Success post "%s" to %s`, postText, mainCh)
+	log.Printf(`Success post "%s"(%s) to %s(%s)\n`, postText, messageResponse.Channel, mainCh, messageResponse.Ts)
 
+	permalinkResponse, err := r.slack.GetPermalink(messageResponse.Channel, messageResponse.Ts)
+	if err != nil {
+		return err
+	}
+	log.Printf(`%s\n`, permalinkResponse.Permalink)
+
+	for _, ch := range r.config.Slack.SubPostChannel {
+		_, err := r.slack.PostMessage(ch, permalinkResponse.Permalink)
+		if err != nil {
+			log.Println(err)
+		}
+	}
 	return
 }
 
@@ -66,4 +78,3 @@ func (r *Remo) ArriveAtOffice() error {
 func (r *Remo) FinishRemoteWork() error {
 	return r.notice("リモートワーク終了します", "閉店", ":crescent_moon:")
 }
-

@@ -3,6 +3,8 @@ package remo
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -21,6 +23,30 @@ type profileRequest struct {
 // Request struct for chat.postMessage
 type messageRequest struct {
 	*Message
+}
+
+type permalinkRequest struct {
+	Channel string
+	Ts      string `json:"message_ts"`
+}
+
+// base struct for response from Slack API
+type response struct {
+	Ok    bool
+	Error string
+}
+
+type MessageResponse struct {
+	response
+	Channel string
+	Ts      string
+	Message Message
+}
+
+type PermalinkResponse struct {
+	response
+	Channel   string
+	Permalink string
 }
 
 // Profile is representation of profile.
@@ -56,7 +82,7 @@ func NewSlack(token string) Slack {
 	}
 }
 
-func (s Slack) createRequest(method string, action string, data interface{}) (*http.Request, error) {
+func (s Slack) createJsonRequest(method string, action string, data interface{}) (*http.Request, error) {
 	b, err := json.Marshal(&data)
 	if err != nil {
 		return nil, err
@@ -72,6 +98,19 @@ func (s Slack) createRequest(method string, action string, data interface{}) (*h
 	return req, nil
 }
 
+func (s Slack) createURLEncodedRequest(method string, action string, body io.Reader) (*http.Request, error) {
+	req, err := http.NewRequest(method, s.baseURL+"/"+action, body)
+	if err != nil {
+		return nil, err
+	}
+
+	if method == http.MethodPost {
+		req.Header.Set("content-type", "application/x-www-form-urlencoded")
+	}
+	req.Header.Set("Authorization", "Bearer "+s.token)
+	return req, nil
+}
+
 // SetStatus change status on Slack
 // required scope: users.profile:write
 func (s Slack) SetStatus(status Status) error {
@@ -79,7 +118,7 @@ func (s Slack) SetStatus(status Status) error {
 	data := profileRequest{
 		Profile: profile,
 	}
-	req, err := s.createRequest("POST", "users.profile.set", data)
+	req, err := s.createJsonRequest("POST", "users.profile.set", data)
 	if err != nil {
 		return err
 	}
@@ -95,7 +134,7 @@ func (s Slack) SetStatus(status Status) error {
 // PostMessage post a message to Slack
 // required scope: chat:write:user, chat:write:bot
 // TODO: examinate what scopes are required specificaly[]
-func (s Slack) PostMessage(to string, message string) error {
+func (s Slack) PostMessage(to string, message string) (*MessageResponse, error) {
 	msg := Message{
 		Text:    message,
 		Channel: to,
@@ -103,15 +142,56 @@ func (s Slack) PostMessage(to string, message string) error {
 		Parse:   "full",
 	}
 	data := messageRequest{&msg}
-	req, err := s.createRequest("POST", "chat.postMessage", data)
+	req, err := s.createJsonRequest("POST", "chat.postMessage", data)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	_, err = s.client.Do(req)
+	res, err := s.client.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	resData := MessageResponse{}
+	resData.Ok = true
+	err = json.NewDecoder(res.Body).Decode(&resData)
+	if err != nil {
+		return nil, err
+	}
+
+	if !resData.Ok {
+		fmt.Printf("Error %v", resData)
+		return nil, fmt.Errorf("error from Slack API: %v", resData.Error)
+	}
+
+	return &resData, nil
+}
+
+func (s Slack) GetPermalink(channel string, ts string) (*PermalinkResponse, error) {
+	// This method does not currently accept application/json.
+	query := fmt.Sprintf("?channel=%s&message_ts=%s", channel, ts)
+	req, err := s.createURLEncodedRequest("GET", "chat.getPermalink"+query, &bytes.Buffer{})
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	resData := &PermalinkResponse{}
+	resData.Ok = true
+	err = json.NewDecoder(res.Body).Decode(resData)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	if !resData.Ok {
+		return nil, fmt.Errorf("error: %v", resData.Error)
+
+	}
+
+	return resData, nil
 }

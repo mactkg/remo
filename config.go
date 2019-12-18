@@ -10,8 +10,13 @@ import (
 
 var defaultConfig = `
 [slack]
+# required: A token that remo use it when communicate with slack
 # token = "xoxp-xxx"
+
+# required: where to post message
 # mainPostChannel = '#report'
+
+# optional: where to post a link of a message remo posted
 # subPostChannel [
 #	"#my_personal_channel"
 #]

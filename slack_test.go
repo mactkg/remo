@@ -55,6 +55,12 @@ func TestSetStatus(t *testing.T) {
 func TestPostMessage(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path == "/chat.getPermalink" {
+				d, _ := json.Marshal(PermalinkResponse{Permalink: "http://foo.slack.com/archives/ABCDEFGH/p42000"})
+				fmt.Fprintln(w, d)
+				return
+			}
+
 			decoder := json.NewDecoder(r.Body)
 			reqMessage := messageRequest{}
 			err := decoder.Decode(&reqMessage)
@@ -78,8 +84,8 @@ func TestPostMessage(t *testing.T) {
 				t.Errorf("as_user must be true")
 			}
 
-			w.Header().Set("content-Type", "text")
-			fmt.Fprintf(w, "ok")
+			w.Header().Set("content-Type", "application/json")
+			fmt.Fprintf(w, `{"ok": true}`)
 			return
 		},
 	))
@@ -87,8 +93,9 @@ func TestPostMessage(t *testing.T) {
 	baseURL = ts.URL
 
 	slack := NewSlack("token")
-	err := slack.PostMessage("#random", "Hello!")
+	permalink, err := slack.PostMessage("#random", "Hello!")
 	if err != nil {
 		t.Fatalf("Request should be done: %v", err)
 	}
+	t.Log(permalink)
 }
