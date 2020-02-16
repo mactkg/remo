@@ -32,6 +32,10 @@ type SlackConfig struct {
 	SubPostChannel  []string
 }
 
+type MessageConfig struct {
+	
+}
+
 type Decoder struct {
 	in io.Reader
 }

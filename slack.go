@@ -8,8 +8,14 @@ import (
 	"net/http"
 )
 
-// Slack have informations to communicate with Slack
-type Slack struct {
+type Slack interface {
+	SetStatus(status Status) error
+	PostMessage(to string, message string) (*MessageResponse, error)
+	GetPermalink(channel string, ts string) (*PermalinkResponse, error)
+}
+
+// slack have informations to communicate with slack
+type slack struct {
 	baseURL string
 	token   string
 	client  http.Client
@@ -30,7 +36,7 @@ type permalinkRequest struct {
 	Ts      string `json:"message_ts"`
 }
 
-// base struct for response from Slack API
+// base struct for response from slack API
 type response struct {
 	Ok    bool
 	Error string
@@ -62,7 +68,7 @@ type Status struct {
 	Expiration int    `json:"status_expiration"`
 }
 
-// Message is representation of message on Slack
+// Message is representation of message on slack
 type Message struct {
 	Channel string `json:"channel"`
 	Text    string `json:"text"`
@@ -72,17 +78,17 @@ type Message struct {
 
 var baseURL = "https://slack.com/api"
 
-// NewSlack create instance of Slack
+// NewSlack create instance of slack
 func NewSlack(token string) Slack {
 	client := http.Client{}
-	return Slack{
+	return slack{
 		baseURL: baseURL,
 		token:   token,
 		client:  client,
 	}
 }
 
-func (s Slack) createJsonRequest(method string, action string, data interface{}) (*http.Request, error) {
+func (s slack) createJsonRequest(method string, action string, data interface{}) (*http.Request, error) {
 	b, err := json.Marshal(&data)
 	if err != nil {
 		return nil, err
@@ -98,7 +104,7 @@ func (s Slack) createJsonRequest(method string, action string, data interface{})
 	return req, nil
 }
 
-func (s Slack) createURLEncodedRequest(method string, action string, body io.Reader) (*http.Request, error) {
+func (s slack) createURLEncodedRequest(method string, action string, body io.Reader) (*http.Request, error) {
 	req, err := http.NewRequest(method, s.baseURL+"/"+action, body)
 	if err != nil {
 		return nil, err
@@ -111,9 +117,9 @@ func (s Slack) createURLEncodedRequest(method string, action string, body io.Rea
 	return req, nil
 }
 
-// SetStatus change status on Slack
+// SetStatus change status on slack
 // required scope: users.profile:write
-func (s Slack) SetStatus(status Status) error {
+func (s slack) SetStatus(status Status) error {
 	profile := Profile{&status}
 	data := profileRequest{
 		Profile: profile,
@@ -131,10 +137,10 @@ func (s Slack) SetStatus(status Status) error {
 	return nil
 }
 
-// PostMessage post a message to Slack
+// PostMessage post a message to slack
 // required scope: chat:write:user, chat:write:bot
 // TODO: examinate what scopes are required specificaly[]
-func (s Slack) PostMessage(to string, message string) (*MessageResponse, error) {
+func (s slack) PostMessage(to string, message string) (*MessageResponse, error) {
 	msg := Message{
 		Text:    message,
 		Channel: to,
@@ -161,13 +167,13 @@ func (s Slack) PostMessage(to string, message string) (*MessageResponse, error) 
 
 	if !resData.Ok {
 		fmt.Printf("Error %v", resData)
-		return nil, fmt.Errorf("error from Slack API: %v", resData.Error)
+		return nil, fmt.Errorf("error from slack API: %v", resData.Error)
 	}
 
 	return &resData, nil
 }
 
-func (s Slack) GetPermalink(channel string, ts string) (*PermalinkResponse, error) {
+func (s slack) GetPermalink(channel string, ts string) (*PermalinkResponse, error) {
 	// This method does not currently accept application/json.
 	query := fmt.Sprintf("?channel=%s&message_ts=%s", channel, ts)
 	req, err := s.createURLEncodedRequest("GET", "chat.getPermalink"+query, &bytes.Buffer{})
