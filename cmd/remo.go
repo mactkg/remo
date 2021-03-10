@@ -35,6 +35,7 @@ func loadConfig() (*remo.Config, error) {
 	if err != nil {
 		return nil, err
 	}
+  defer configFile.Close()
 
 	decoder := remo.NewDecoder(configFile)
   if err = decoder.Decode(config); err != nil {
